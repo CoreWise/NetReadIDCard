@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">网络身份证</string>
+    <string name="readme">1. 使用网络身份证之前需申请授权\n\n2. 显示激活成功后才可以读网络身份证\n\n3. 如果申请授权没有成功，请联系商务\n\n4. USB读身份证需要本公司CR30S设备\n\n\n*授权成功一次即可,请勿重复授权
+    </string>
+</resources>

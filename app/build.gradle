@@ -1,0 +1,65 @@
+apply plugin: 'com.android.application'
+
+def releaseTime() {
+    return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
+}
+
+android {
+    compileSdkVersion 26
+
+    signingConfigs {
+        release {
+            keyAlias 'kmsCoreWise'
+            keyPassword 'kmsCoreWise'
+            storeFile file('C:/KeyStore/sign_jokey.jks')
+            storePassword 'kmsCoreWise'
+        }
+    }
+
+    defaultConfig {
+
+        applicationId "com.cw.netnfcreadidcard"
+        minSdkVersion 15
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    //配置自定义打包名称
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            // 输出apk名称为 U8_20181119V1.3_release.apk
+            def fileName = "${"网络身份证" + "${releaseTime()}"+"_" + buildType.name}.apk"
+            outputFileName = fileName
+        }
+    }
+}
+//必须2
+repositories {
+    flatDir {
+        dirs 'libs'   // aar目录
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+   // api project(':netnfcreadidcardlib')
+
+    implementation(name: 'net_idcard_sdk_20190522', ext: 'aar')
+
+
+
+}
