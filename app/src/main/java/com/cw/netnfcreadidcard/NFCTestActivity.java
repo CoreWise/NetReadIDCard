@@ -14,6 +14,7 @@ import android.nfc.NfcAdapter;
 import android.nfc.tech.NfcB;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -60,6 +61,8 @@ public class NFCTestActivity extends BaseActivity implements ReadListener {
     private TextView mTvFingerData;
 
     private TextView mTvResult;
+    private TextView mTvUID;
+
     private EditText mEtRegistrationCode;
 
     private NfcAdapter mNfcAdapter;
@@ -99,10 +102,10 @@ public class NFCTestActivity extends BaseActivity implements ReadListener {
         api = new ReadAPI(this, R.raw.base, R.raw.license, m_RootPath, this, conn);
 
 
-
         @SuppressLint("ResourceType")
-        FriendDialog mFriendDialog = new FriendDialog(this, BaseUtils.dip2px(this,350f), BaseUtils.dip2px(this,500f), R.layout.dialog_friend, R.style.DialogTheme);
+        FriendDialog mFriendDialog = new FriendDialog(this, BaseUtils.dip2px(this, 350f), BaseUtils.dip2px(this, 500f), R.layout.dialog_friend, R.style.DialogTheme);
         mFriendDialog.show();
+
 
     }
 
@@ -120,6 +123,8 @@ public class NFCTestActivity extends BaseActivity implements ReadListener {
         this.imgVIdPhoto = (ImageView) findViewById(R.id.ImgV_IdPhoto);
         mEtRegistrationCode = (EditText) findViewById(R.id.et_registrationCode);
         mTvResult = (TextView) findViewById(R.id.tv_result);
+        mTvUID = (TextView) findViewById(R.id.tv_uid);
+
 
     }
 
@@ -138,8 +143,6 @@ public class NFCTestActivity extends BaseActivity implements ReadListener {
     @Override
     protected void onResume() {
         super.onResume();
-        byte[] bytes = "河北省石家庄市长安区北二环东路130号3栋2单元1603号".getBytes();
-        Log.e(TAG,"自己长度："+bytes.length);
 
         mNfcAdapter.enableForegroundDispatch(this, mPendingIntent, mIntentFilters, mTechLists);
     }
@@ -149,11 +152,14 @@ public class NFCTestActivity extends BaseActivity implements ReadListener {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
+        mTvUID.setText("");
+
         Log.e(TAG, "-----------------onNewIntent----------------");
 
         if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
             if (api != null) {
-                api.read(intent);
+                byte[] UID = api.read(intent);
+                mTvUID.setText("UID: " + DataUtils.toHexString(UID));
 
             } else {
                 Log.d(Constants.TAG, "api 未初始化");
@@ -274,6 +280,17 @@ public class NFCTestActivity extends BaseActivity implements ReadListener {
             case RET_CALLBACK_READSUCCESS_ERROR:
                 Toast.makeText(getApplicationContext(), "找不到readSuccess方法", Toast.LENGTH_SHORT).show();
                 break;
+
+            case RET_CALLBACK_FINGERDATA_ERROR:
+                Toast.makeText(getApplicationContext(), "获取指纹数据回调错误", Toast.LENGTH_SHORT).show();
+                break;
+            case RET_READ_CACHE_TIMEOUT_ERROR:
+                Toast.makeText(getApplicationContext(), "读取缓存超时错误", Toast.LENGTH_SHORT).show();
+                break;
+            case RET_NO_LICENSE_FILE_ERROR:
+                Toast.makeText(getApplicationContext(), "没有授权文件", Toast.LENGTH_SHORT).show();
+                break;
+
             default:
                 break;
         }
@@ -287,7 +304,7 @@ public class NFCTestActivity extends BaseActivity implements ReadListener {
         updateIdCardInfo(idCardInfo);
         final long readTime = System.currentTimeMillis() - startMillis;
 
-        mTvResult.setText("读卡时间: "+readTime+"  总数: " + sum + " 成功: " + success);
+        mTvResult.setText("读卡时间: " + readTime + "  总数: " + sum + " 成功: " + success);
     }
 
 

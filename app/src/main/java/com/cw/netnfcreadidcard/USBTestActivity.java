@@ -8,8 +8,10 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -47,6 +49,8 @@ public class USBTestActivity extends BaseActivity implements ReadListener {
 
     private TextView mTvResult;
     private EditText mEtRegistrationCode;
+
+    private TextView mTvUID;
 
     /**
      * 是否是连续读取
@@ -92,12 +96,11 @@ public class USBTestActivity extends BaseActivity implements ReadListener {
         this.imgVIdPhoto = (ImageView) findViewById(R.id.ImgV_IdPhoto);
         mEtRegistrationCode = (EditText) findViewById(R.id.et_registrationCode);
 
+        mTvUID = (TextView) findViewById(R.id.tv_uid);
+
         mTvResult = (TextView) findViewById(R.id.tv_result);
 
         final Button mBtStop = (Button) findViewById(R.id.bt_stop);
-
-
-
 
 
         Button mBtRead = (Button) findViewById(R.id.bt_read);
@@ -106,7 +109,16 @@ public class USBTestActivity extends BaseActivity implements ReadListener {
 
             @Override
             public void onClick(View view) {
-                api.read();
+                final byte[] uid = api.read();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mTvUID.setText("UID: " + DataUtils.toHexString(uid));
+                    }
+                });
+
+
             }
         });
 
@@ -119,7 +131,7 @@ public class USBTestActivity extends BaseActivity implements ReadListener {
                 clear();
                 isSequentialRead = true;
                 success = 0;
-                sum=0;
+                sum = 0;
                 mHandler.post(task);
                 mBtReadCon.setEnabled(false);
                 mBtStop.setEnabled(true);
@@ -136,6 +148,7 @@ public class USBTestActivity extends BaseActivity implements ReadListener {
                 mBtReadCon.setEnabled(true);
                 mBtStop.setEnabled(false);
             }
+
         });
 
     }
@@ -266,7 +279,6 @@ public class USBTestActivity extends BaseActivity implements ReadListener {
     }
 
 
-
     @Override
     public void readSuccess(final IdCardInfo idCardInfo) {
         success++;
@@ -280,6 +292,7 @@ public class USBTestActivity extends BaseActivity implements ReadListener {
         mTvResult.setText("读卡时间: " + readTime + "  总数: " + sum + " 成功: " + success);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void updateIdCardInfo(IdCardInfo idCardInfo) {
         this.txtIdName.setText(idCardInfo.getName());
         this.txtIdSex.setText(idCardInfo.getSex());

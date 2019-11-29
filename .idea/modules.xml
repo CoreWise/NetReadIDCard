@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/NetReadIDCard.iml" filepath="$PROJECT_DIR$/NetReadIDCard.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NetReadIdcardSDK/NetReadIdcardSDK.iml" filepath="$PROJECT_DIR$/NetReadIdcardSDK/NetReadIdcardSDK.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

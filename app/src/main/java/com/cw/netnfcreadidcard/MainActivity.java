@@ -9,10 +9,13 @@ import android.app.Activity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cw.netnfcreadidcardlib.Interface.RegisterListener;
 import com.cw.netnfcreadidcardlib.RegisterAPI;
+
+import org.w3c.dom.Text;
 
 import static com.cw.netnfcreadidcardlib.Interface.ReadListener.*;
 
@@ -28,6 +31,8 @@ public class MainActivity extends Activity implements RegisterListener {
 
     private EditText mEtRegistrationCode;
 
+    private TextView tvVersion;
+
     private RegisterAPI api;
 
 
@@ -35,23 +40,25 @@ public class MainActivity extends Activity implements RegisterListener {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        CrashHandler.getInstance().init(this);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         mEtRegistrationCode = (EditText) findViewById(R.id.et_registrationCode);
-
+        tvVersion = findViewById(R.id.tv_version);
 
         api = new RegisterAPI(this);
 
 
+        tvVersion.setText("so version: " + api.getSoVersion() + " buildDate: " + api.getDate());
 
 
     }
 
     public void NFC(View view) {
 
-         if (!isNetworkAvailable()) {
+        if (!isNetworkAvailable()) {
             Toast.makeText(this, "读身份证需要联网!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -61,7 +68,7 @@ public class MainActivity extends Activity implements RegisterListener {
 
     public void USB(View view) {
 
-         if (!isNetworkAvailable()) {
+        if (!isNetworkAvailable()) {
             Toast.makeText(this, "读身份证需要联网!", Toast.LENGTH_SHORT).show();
             return;
         }

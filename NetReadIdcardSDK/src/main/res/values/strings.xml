@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">NetNFCReadIDCardLib</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+	<string name="Sw_IdName">XXXXXX</string>
+    <string name="Sw_IdSex">XX</string>
+    <string name="Sw_IdNation">XX</string>
+    <string name="Sw_IdYear">XXXX</string>
+    <string name="Sw_IdMouth">XX</string>
+    <string name="Sw_IdDay">XX</string>
+    <string name="Sw_IdAddress">XX省XX市XX区XX街道XX号</string>
+    <string name="Sw_IdNum">XXXXXXXXXXXXXXXXXX</string>
+    <string name="Sw_IdPhoto">IdPhoto</string>
+    <string name="Sw_ReadIdCard">ReadIdCard</string>
+    <string name="Sw_Read3IdCard">Read3IdCard</string>
+    <string name="Sw_ReadModuleNo">ReadModNo</string>
+    <string name="Sw_ReadCardNo">ReadCardNo</string>
+    <string name="Sw_ReadCircle">ReadCircle</string>
+    <string name="Sw_Stop">Stop</string>
+    <string name="Sw_ClearIdCard">Clear</string>
+    <string name="title_activity_usbtest">USBTestActivity</string>
+    <string name="title_activity_test">TestActivity</string>
+
+</resources>

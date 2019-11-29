@@ -1,0 +1,172 @@
+apply plugin: 'com.android.library'
+
+
+/*
+* 说明：
+*
+* Android Studio:
+* 1.make Project编译aar包
+* 2.aar路径在 build/outputs/aar/
+*
+* Eclipse:
+*
+* 1.终端输入gradlew makejar编译jar
+* 2.jar路径在build/libs/
+*
+* */
+
+def releaseTime() {
+    return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
+}
+android {
+    compileSdkVersion 22
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 22
+        versionCode 1
+        //versionName "1.0"
+        versionName "net_idcard_sdk_" + releaseTime()
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+     lintOptions {
+          abortOnError false
+      }
+
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+
+    libraryVariants.all{ variant->
+        variant.outputs.all{
+            def filename="${defaultConfig.versionName}.aar"
+            outputFileName=filename
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.android.support:appcompat-v7:22.2.1'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+
+
+
+task copyLibs(type: Copy) {
+    from configurations.compile
+    into 'libs'
+}
+
+task clearJar(type: Delete) {
+    delete 'build/libs/'+"${android.defaultConfig.versionName}"
+}
+def zipFile = file('build/intermediates/bundles/release/classes.jar')
+
+//打包任务
+task makeNetIDCard(type: org.gradle.api.tasks.bundling.Jar) {
+
+    from zipTree(zipFile)
+    //from fileTree(dir: 'src/main',includes: ['assets/**', 'jniLibs/**','java/**'],excludes: [''])//将assets目录打入jar包
+
+    //指定生成的jar名
+    baseName "${android.defaultConfig.versionName}"    //从哪里打包class文件
+    //from('build/intermediates/jniLibs/release/')
+    //打包到jar后的目录结构
+    into('/')
+    //去掉不需要打包的目录和文件
+    exclude('BuildConfig.class', 'R.class')
+    //去掉R$开头的文件
+    exclude { it.name.startsWith('R$'); }
+}
+
+
+// ---------- 编译并发布AAR (删除旧AAR，编译新AAR，拷贝新AAR至同一目录) ----------
+
+task aarRelease(type: Copy) {
+
+    // 任务开始
+    println "----------> AAR Release Task Start <----------"
+
+    //编译aar源文件路径
+    def rootPath = rootProject.rootDir.path // 工程根路径
+    def buildPath = "\\build\\outputs\\aar" // AAR所在的编译路径
+    def aarPath = rootPath  +"\\NetReadIdcardSDK"+ buildPath + "\\${android.defaultConfig.versionName}"+".aar"
+
+
+
+
+    // AAR输出路径
+    def aarOutPath = rootPath + "\\..\\sdk\\"
+
+    def jarPath = rootPath  +"\\NetReadIdcardSDK\\build\\libs"+ "\\${android.defaultConfig.versionName}"+".jar"
+
+    def jarOutPath=rootPath+"\\..\\sdk\\"
+
+    // 封装数组
+    def modulePaths = [aarPath]
+    def jarmodulePaths = [jarPath]
+
+    // 删除AAR输出目录
+    //println "Delete -> " + aarOutPath
+    //delete aarOutPath
+
+    // 循环删除各个AAR编译目录
+    for (path in modulePaths) {
+        println "Delete -> " + path
+        delete path
+    }
+
+    // 循环删除各个jar编译目录
+    for (path in jarmodulePaths) {
+        println "Delete -> " + path
+        delete path
+    }
+
+    // 执行编译AAR脚本（原生脚本）
+    dependsOn 'assembleRelease'
+
+    // 循环拷贝AAR到ARR输出目录
+    for (path in modulePaths) {
+        // 显示开始拷贝
+        println "-> Start of current copy <-"
+        // 当前目录
+        println "From : " + path
+        from path
+        // 拷贝至 aarOutPath
+        println "Into : " + aarOutPath
+        into aarOutPath;
+        // 显示当前拷贝结束
+        println "-> End of current copy <-"
+    }
+
+    // 循环拷贝jar到jar输出目录
+    for (path in jarmodulePaths) {
+        // 显示开始拷贝
+        println "-> Start of current copy <-"
+        // 当前目录
+        println "From : " + path
+        from path
+        // 拷贝至 aarOutPath
+        println "Into : " + jarOutPath
+        into jarOutPath;
+        // 显示当前拷贝结束
+        println "-> End of current copy <-"
+    }
+    // 任务结束
+    println "----------> AAR Release Task End <----------"
+
+}
+
+makeNetIDCard.dependsOn(clearJar, build,aarRelease)

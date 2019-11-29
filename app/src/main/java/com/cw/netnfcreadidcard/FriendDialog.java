@@ -76,7 +76,46 @@ public class FriendDialog extends Dialog {
 
     public FriendDialog(@NonNull Context context, int width, int height, @IdRes int layout, int style) {
         super(context);
-        View view = getLayoutInflater().inflate(R.layout.dialog_friend, null);
+
+
+        initView(context);
+
+
+        initTimer();
+
+
+
+    }
+
+    private void initTimer() {
+
+        timer = new Timer();
+
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                second--;
+
+                if (second == -1) {
+
+                    mHandler.sendEmptyMessage(enable);
+                    mHandler.sendEmptyMessage(destorytimer);
+
+                } else {
+                    mHandler.sendEmptyMessage(disabble);
+                    mHandler.sendEmptyMessage(update);
+
+                }
+
+
+            }
+        };
+        timer.scheduleAtFixedRate(task, 0, 1000);
+    }
+
+    private void initView(Context context) {
+
+         View view = getLayoutInflater().inflate(R.layout.dialog_friend, null);
 
         setContentView(view);
         Window window = getWindow();
@@ -104,30 +143,6 @@ public class FriendDialog extends Dialog {
 
         tv_know = view.findViewById(R.id.btn_know);
         tv_know.setText("知道了( " + second + "s )");
-
-
-        timer = new Timer();
-
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                second--;
-
-                if (second == -1) {
-
-                    mHandler.sendEmptyMessage(enable);
-                    mHandler.sendEmptyMessage(destorytimer);
-
-                } else {
-                    mHandler.sendEmptyMessage(disabble);
-                    mHandler.sendEmptyMessage(update);
-
-                }
-
-
-            }
-        };
-        timer.scheduleAtFixedRate(task, 0, 1000);
 
     }
 
