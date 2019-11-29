@@ -133,7 +133,7 @@ public class NativeSupport {
 
     static {
         //System.loadLibrary("KmsSupport0624");
-        System.loadLibrary("KmsSupport20191129");
+        System.loadLibrary("KmsSupport20191129_2");
     }
 
 
