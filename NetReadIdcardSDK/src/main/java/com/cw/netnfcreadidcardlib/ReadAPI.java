@@ -1,20 +1,18 @@
 package com.cw.netnfcreadidcardlib;
 
+import android.content.Context;
+import android.content.Intent;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
+import android.os.Handler;
+import android.util.Log;
+
 import com.corewise.idcardreadersdk.support.NativeSupport;
 import com.cw.netnfcreadidcardlib.Bean.IdCardInfo;
 import com.cw.netnfcreadidcardlib.Interface.Conn;
 import com.cw.netnfcreadidcardlib.Interface.ReadListener;
 import com.cw.netnfcreadidcardlib.SFZ.AnalysisIDCard;
 import com.cw.netnfcreadidcardlib.Utils.DataUtils;
-
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.nfc.NfcAdapter;
-import android.nfc.Tag;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 
 public class ReadAPI {
 

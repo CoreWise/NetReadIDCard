@@ -1,11 +1,11 @@
 package com.cw.netnfcreadidcard;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.app.Activity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -15,9 +15,36 @@ import android.widget.Toast;
 import com.cw.netnfcreadidcardlib.Interface.RegisterListener;
 import com.cw.netnfcreadidcardlib.RegisterAPI;
 
-import org.w3c.dom.Text;
-
-import static com.cw.netnfcreadidcardlib.Interface.ReadListener.*;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_CALLBACK_GETKEY_ERROR;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_CALLBACK_IDCONTENT_ERROR;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_CALLBACK_READSUCCESS_ERROR;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_CALLBACK_SENDDATA_ERROR;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_CHECK_LICENSE_ERROR;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_DECODE_FAIL;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_GET_UID_FAIL;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_ILLEGAL_DEVICE;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_LICENSE_OVERDUE;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_NET_ERROR;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_NO_SERVER;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_READ_IMEI_ERROR;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_READ_PACKAGE_RESPONSE_ERROR1;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_READ_REGIST_ERROR;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_READ_WIFI_MAC_ERROR;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_REGIST_CODE_ERROR1;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_REGIST_CODE_ERROR2;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_REGIST_DEVICE_ERROR;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_REGIST_DEVICE_EXISTS;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_REGIST_PARAM_ERROR;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_REGIST_SYSTEM_ERROR;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_RESPONSE_JSON_ERROR;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_RESPONSE_PARAM_ERROR;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_RF_CONNECT_FAIL;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_SAVE_LICENSE_ERROR;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_SOCKET_CONNECT_ERROR;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_SOCKET_DISCONNECT_ERROR;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_SOCKET_SENDDATA_ERROR;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_SOCKET_TIMEOUT_ERROR;
+import static com.cw.netnfcreadidcardlib.Interface.ReadListener.RET_UNKNOW_ERROR;
 
 /**
  * 作者：李阳
@@ -25,6 +52,8 @@ import static com.cw.netnfcreadidcardlib.Interface.ReadListener.*;
  * 描述：
  */
 public class MainActivity extends Activity implements RegisterListener {
+
+
 
     private static final String TAG = "MainActivity";
 

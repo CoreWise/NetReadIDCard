@@ -43,8 +43,7 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 public class NFCTestActivity extends BaseActivity implements ReadListener {
 
     private static final String TAG = "NFCTestActivity";
-
-    private String m_RootPath;
+ private String m_RootPath;
     private int success = 0;
     private int sum = 0;
 

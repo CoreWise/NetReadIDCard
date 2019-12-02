@@ -3,8 +3,6 @@ package com.corewise.idcardreadersdk.support;
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
-
 
 import com.cw.netnfcreadidcardlib.Constants;
 import com.cw.netnfcreadidcardlib.Interface.Conn;
@@ -133,7 +131,7 @@ public class NativeSupport {
 
     static {
         //System.loadLibrary("KmsSupport0624");
-        System.loadLibrary("KmsSupport20191129_2");
+        System.loadLibrary("KmsSupport_abc");
     }
 
 
