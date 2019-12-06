@@ -63,11 +63,31 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:paddingBottom="15dp"
                 android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:text="知道了"
                 android:textColor="#FFD306"
                 android:textSize="17dp" />
+
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorWhite">
+
+            </View>
+
+            <TextView
+                android:id="@+id/btn_jump"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:text="跳过"
+                android:textColor="#FFD306"
+                android:textSize="17dp"
+                android:visibility="gone" />
 
         </LinearLayout>
 
